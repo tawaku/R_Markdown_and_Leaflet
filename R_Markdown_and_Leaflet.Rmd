@@ -1,0 +1,42 @@
+---
+title: "Public Restroom in Shiagawa, Tokyo"
+author: "tawaku"
+date: "2020/12/26"
+output: html_document
+---
+
+# Overview
+This web page shows public restrooms in Tokyo, Shinagawa-ku on map.
+We can download CSV data for public restrooms in Shinagawa-ku from 'http://www.city.shinagawa.tokyo.jp/ct/other000081600/toilet.csv'
+
+|This web page created at|
+|---|
+|2020/12/26|
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r load_lib}
+library(leaflet)
+```
+
+```{r read_data}
+data = read.csv('toilet.csv', header = TRUE, fileEncoding = 'Shift_JIS')
+```
+
+```{r extract_latlng}
+LAT_POS = 13
+LNG_POS = 14
+
+latlng = data[LAT_POS:LNG_POS]
+names(latlng) = c('lat', 'lng')
+```
+
+## Map
+```{r plot_map}
+latlng %>%
+    leaflet() %>%
+    addTiles() %>%
+    addMarkers(clusterOptions = markerClusterOptions())
+```
